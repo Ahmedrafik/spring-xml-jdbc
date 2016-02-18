@@ -6,4 +6,22 @@
 	 xsi:schemaLocation="http://www.springframework.org/schema/beans
 	 					 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean id="employeeFactory" class="employee.factory.EmployeeFactory" init-method="createListEmployee"/>
+	
+	<bean id="employeeRepository" class="employee.repository.EmployeeFactoryRepository" init-method="findLastHired">
+			  <property name="employeeFactory" ref="employeeFactory"/>
+	</bean>
+	
+	 <bean id="employeeService" class="employee.service.EmployeeFactoryService" >
+		<constructor-arg ref="employeeRepository"/>
+	</bean>
+	
+	<!-- <bean id="employeeService" class="employee.service.EmployeeMockService"></bean> -->
+	
+	<bean id="companyService" class="company.service.CompanyFactoryService" init-method="findAllEmployees">
+		<property name="employeeService" ref="employeeService"/>
+	</bean>
+	
+	
+
 </beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:beans="http://www.springframework.org/schema/beans"
+	 xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 					 http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	
+	
+	<bean id="employeeFactory" class="employee.factory.EmployeeFactory" init-method="createListEmployee"/>
+	
+	<bean id="employeeRepository" class="employee.repository.EmployeeFactoryRepository" init-method="findLastHired">
+			  <property name="employeeFactory" ref="employeeFactory"/>
+	</bean>
+	
+	<bean id="employeeService" class="employee.service.EmployeeFactoryService" >
+		<constructor-arg ref="employeeRepository"/>
+	</bean>
+	
+	<!-- <bean id="employeeService" class="employee.service.EmployeeMockService"></bean> -->
+	
+	<bean id="companyService" class="company.service.CompanyFactoryService" init-method="findAllEmployees">
+		<property name="employeeService" ref="employeeService"/>
+	</bean>
+	
+	<bean id="employeeJdbcRepository" class="employee.repository.EmployeeJdbcRepository"/>
+	
+	<bean id="employeeJdbcService" class="employee.service.EmployeeJdbcService" >
+		<property name="employeeJdbcRepository" ref="employeeJdbcRepository"/>
+	</bean>
+		
+</beans>
